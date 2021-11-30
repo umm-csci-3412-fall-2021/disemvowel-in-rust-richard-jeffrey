@@ -15,6 +15,11 @@ fn main() {
     // be the file we want to write the disemvoweled text to.
     let args: Vec<String> = env::args().collect();
 
+    if args.len() < 3 {
+        panic!("Not enough arguments")
+
+    }
+
     //TODO: Panic if not enough arguments are provided
     //Panic should output the string "Not enough arguments"
 
@@ -24,13 +29,13 @@ fn main() {
     //  * Write the disemvoweled text using write_file
 
     // Replace String::from("dummy text") with what you get from read_file
-    let s = String::from("dummy text");
+    let string_from_file = String::from(read_file(Path::new(&args[1])));
 
-    let s_disemvowel = disemvowel(&s);
+    let s_disemvowel = disemvowel(&string_from_file);
 
     // Use command-line arguments for the name of the file,
     // and s_disemvowel for the text to write out.
-    write_file(Path::new("dummy.txt"), "output string");
+    write_file(Path::new(&args[2]), &s_disemvowel);
 }
 
 fn read_file(path: &Path) -> String {
@@ -42,7 +47,15 @@ fn write_file(path: &Path, s: &str) {
 
 //TODO: Return the input string without vowels.
 fn disemvowel(s: &str) -> String {
-    String::from(s)
+    let mut result = String::from("");
+    for character in s.chars() {
+        let is_lowercase_vowel = character == 'a' || character == 'e' || character == 'i' || character == 'o' || character == 'u';
+        let is_uppercase_vowel = character == 'A' || character == 'E' || character == 'I' || character == 'O' || character == 'U';
+        if !(is_lowercase_vowel || is_uppercase_vowel) {
+            result.push(character);
+        }
+    }
+    String::from(result)
 }
 
 // Everything from here down is Rust test code. You shouldn't need to
